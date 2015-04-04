@@ -11,7 +11,7 @@
 #        J*q is the number of expected false rejections, typically a constant
 #        even if the problem size grows
 
-regularized_weights = function(mu, sigma, q) {
+bayes_weights = function(mu, sigma, q) {
   
   J = length(mu)
   

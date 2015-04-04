@@ -3,16 +3,13 @@
 # given means of test statistics, the weighting scheme optimizes
 # the expected number of discoveries at some specific level q
 #
-# Reference: Roeder, K., & Wasserman, L. (2009). Genome-wide significance levels 
-# and weighted hypothesis testing. Statistical science, 24(4), 398.
-#
 # inputs:
 # mu - a non-positive vector of length J, the estimated means of test statistics
 # q - level at which the number of discoveries should be maximized; 
 #        J*q is the number of expected false rejections, typically a constant
 #        even if the problem size grows
 
-roeder_wasserman_weights = function(mu, q) {
+spjotvoll_weights = function(mu, q) {
   
   J = length(mu)
   
