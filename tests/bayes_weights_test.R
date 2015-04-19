@@ -1,7 +1,6 @@
 # Unit tests for bayes weights
 
-setwd("C:/Dropbox/Weighted New/pvalue_weighting_r/R")
-source("bayes_weights.R")
+source("./R/bayes_weights.R")
 
 # Plots  ----------------
 # generate means
@@ -20,7 +19,7 @@ for (j in (1:4)) {
     alpha <- 2^j / J
     w_1 <- bayes_weights(mu, sigma, alpha)
     plot(mu, w_1$w)
-} 
+}
 
 # Brent  ----------------
 # generate means
@@ -30,7 +29,7 @@ sigma <- 1 * rep(1, J)
 alpha <- 100
 
 # find weights
-source("bayes_weights.R")
+#source("bayes_weights.R")
 w_1 <- bayes_weights(mu, sigma, q = alpha/J)
 plot(mu,w_1$w)
 

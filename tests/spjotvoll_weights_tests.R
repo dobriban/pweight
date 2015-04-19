@@ -1,8 +1,7 @@
 # Unit tests for Spjotvoll weights
 
-setwd("C:/Dropbox/Weighted New/pvalue_weighting_r/R")
-source("bayes_weights.R")
-source("spjotvoll_weights.R")
+source("./R/bayes_weights.R")
+source("./R/spjotvoll_weights.R")
 
 # Plots  ----------------
 # generate means

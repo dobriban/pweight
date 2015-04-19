@@ -1,0 +1,142 @@
+---
+title: "Pweight Basics"
+author: "Edgar Dobriban"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+bibliography: weighted.bib
+vignette: >
+  %\VignetteIndexEntry{Pweight Basics}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+The Pweight R package contains open source implementations of p-value weighting methods for multiple testing, including Spjotvoll, exponential and Bayes weights.
+
+In this vignette, we will walk through an example data analysis with p-value weights. 
+
+## P-value weighting methods
+
+For each p-value weighting method, we assume we observe data $T_i \sim \mathcal{N}(\mu_i, 1)$ and test each null hypothesis $H_i: \mu_i \ge 0$ against $\mu_i <0$.  The p-value for testing $H_i$ is $P_i = \Phi(T_i)$, where $\Phi$ is the normal cumulative distribution function.  For a weight vector $w \in [0,\infty)^{J}$ and significance level $q \in [0,1]$, the weighted Bonferroni procedure rejects $H_{i}$ if $P_i \le q w_i$. Usual Bonferroni corresponds to $w_i=1$.
+
+Each p-value weighting method assumes some additional independent information about $\mu_i$, and returns a weight vector $w$. These can then be used for weighted Bonferroni or other multiple testing procedures.
+
+
+## Bayes weights
+
+Bayes p-value weights are the flagship method of the Pweight package. They assume that the prior information takes the form of normal distributions. 
+
+Bayes p-value weights can be computed using:  `bayes_weights(eta, sigma, q)`. The inputs specify the prior distribution of the means $\mu_i$ of the test statistics as:
+
+$$\mu_i \sim \mathcal{N}(\eta_i,\sigma_i^2), \mbox{   } i \in \{1,\ldots, J\}$$ 
+
+where:
+
+
+* `eta`:  the estimated prior means, a vector of length J.
+* `sigma`:  the estimated prior standard errors of the , a positive vector of length J.
+* `q`: level at which tests will be performed. The weights are optimal if each hypothesis is tested at level $q$. For instance, if we want to control the FWER globally at $0.05$, then we should use $q = 0.05/J$.
+
+
+The outputs are a list consisting of: 
+
+* `w`:  the optimal Bayes weights. A non-negative vector of length J.
+* `lambda`: the dual certificate, normalizing constant produced by solving the optimization problem;
+* `q_star`: true value of q solved for. the value $q^*$ for which the weights are optimal. This may differ slightly from the original $q$ if $q$ is large.
+* `q_thresh`: the largest value of $q$ for which the weights can be computed exactly 
+
+## Example
+
+We will present an example of p-value weighting with simulated data. We generate two sets of test statistics, the prior and the current data. A small fraction of the prior data holds some information about the current data. However, most prior data is noise. In our experience working with GWAS data, this is a reasonable model for association studies done on two independent samples and two distinct traits (such as cardiovascular disease and aging).
+
+### Generating the Data 
+We do this by drawing from a mixture distribution. We generate a large number $J$ of tests. For each test $i$ we flip a coin $X_i$: If $X_i=1$, then the prior is meaningful, else it is noise. If the prior is meaningful, we draw a random negative $\mu_i$ and both test statistics $(T^{1}_i,T^{2}_i)$ are Gaussians centered at $\mu_i$. Else we draw two independent normal test statistics $(T^{1}_i,T^{2}_i)$. This ensures that this small fraction of the data is correlated. The code is:
+
+
+```{r}
+set.seed(2)
+J <- 500
+mu <- - 2*abs(rnorm(J))
+frac_sig <- 0.1
+X <- rbinom(J, 1, frac_sig)
+t1 <- rnorm(J, X*mu,1)
+t2 <- rnorm(J, X*mu,1)
+```
+
+The data that this generates shows the desired patter, as can be seen on a scatterplot. Most pairs have no correlation, but there is a small fraction that does.
+
+```{r, fig.show='hold'}
+scatter.smooth(t1,t2)
+```
+
+The p-values for the one-sided tests $\mu_i = 0$ vs $\mu_i <0$ utilizing only the current data are $P_i = \Phi(T^{2}_i)$.
+
+```{r, fig.show='hold'}
+P_current <- pnorm(t2)
+```
+
+### Data Analysis: Bonferroni
+
+We want to test the hypotheses $\mu_i = 0$ against $\mu_i <0$ for each $i$ utilizing the current data $T^{2}_i$. The simplest way is by Bonferroni-corrected multiple testing. We choose an uncorrected significance level $\alpha=0.05$ and call the `bonferroni(...)` function on the p-values.
+
+```{r}
+alpha <- 0.05
+P_adjusted <- p.adjust(P_current,"bonferroni")
+ind <- (P_adjusted<alpha)
+cat(c("Number of significant tests using Bonferroni: ", sum(ind) ))
+
+```
+
+
+Bonferroni leads to 4 significant test statistics. 
+
+### Data Analysis: P-value Weighting
+
+Alternatively, one can do p-value weighting. For this, we use $T^1$ as prior information. We set the prior standard errors $\sigma=1$ in this example. More detailed discussion on the choice of $\sigma$ can be found in [@dobriban2015optimal]. As explained earlier, we set $q  = 0.05/J$. Then we compute the weights. Finally, we run weighted Bonferroni on the weighted p-values $P'_i = P_i/w_i$. This is the code that accomplishes it:
+
+
+```{r}
+q <- alpha/J
+sigma <- rep(1,J)
+source("../R/bayes_weights.R")
+res <- bayes_weights(t1,sigma,q)
+w <- res$w
+P_weighted <- P_current/w
+P_w_adjusted <- p.adjust(P_weighted,"bonferroni")
+ind_w <- (P_w_adjusted<alpha)
+cat(c("Number of significant tests using Weighting: ", sum(ind_w) ))
+```
+
+
+Hence, in this example weighting increases the number of significant hits from 4 to 5.
+
+##  Post-Analysis
+
+One can get some insight into the procedure by examining which hypotheses were declared significant by the two methods. The following code reveals which test were significant:
+
+```{r}
+which(ind==1)
+which(ind_w==1)
+```
+
+
+In this particular case weighting leads to a strict increase in power, selecting an addional hypothesis. Taking 266 as an example we see that its P-value and z-score in the current data equals 
+
+```{r}
+x = 266
+P_current[x]
+t2[x]
+```
+This is not enough for it to be significant since the threshold is $0.05/J=0.0001$. However, it gets assigned a large weight, because its prior  effect is large. So it's selected after weighting.
+
+```{r}
+w[x]
+t1[x]
+```
+
+Another insight can be gained from plotting the weights as a function of the prior mean. We see that the weights are non-monotonic as a function of the prior mean. Indeed they place a large mass on the middle means between (-6 and -2).
+
+```{r}
+plot(t1,w)
+```
+
+## References
