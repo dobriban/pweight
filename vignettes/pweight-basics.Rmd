@@ -139,4 +139,38 @@ Another insight can be gained from plotting the weights as a function of the pri
 plot(t1,w)
 ```
 
+## iGWAS
+
+Now we perform an informed Genome-Wide Association Study (or iGWAS) on this data set, using the provided \code{iGWAS} function. For this we need to provide P-values and sample sizes for both the current and the prior studies.
+
+The p-values are obtained from \code{t1} just like for \code{t1} previously.
+
+```{r}
+P_prior <- pnorm(t1)
+```
+
+This simulation did not use any specific sample sizes, so we are simply going to assume that the sample sizes are as follows:
+
+```{r}
+N_current <- 1
+N_prior <- 1
+```
+
+Now we can run iGWAS. This method computes the p-value weights based on the prior p-values, and uses them in multiple testing (p-value weighting) for the current p-values.  The p-value weighting method (e.g. Unweighted, Bayes) and the multiple testing adjustment (e.g. Bonferroni, Benjamini-Hochberg) can be specified independently. However, we will use the basic settings, which correspond to Bayes weights with Bonferroni testing.
+
+First we perform unweighted testing.
+
+```{r}
+source("../R/iGWAS.R")
+res_unw <- iGWAS(P_current, N_current, P_prior, N_prior, weighting_method="unweighted")
+```
+
+As expected, we get the same results as before. Now, we perform weighted testing. To indicate that the prior p-values are one-sided, we include the 'sides=1' argument. 
+
+```{r}
+res_w <- iGWAS(P_current, N_current, P_prior, N_prior, sides=1)
+```
+
+Again, p-value weighting leads to improved power, and a larger number of significant hits. 
+
 ## References

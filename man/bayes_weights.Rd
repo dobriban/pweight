@@ -51,6 +51,6 @@ res <- bayes_weights(mu, sigma, q)
 }
 \seealso{
 Other p.value.weighting: \code{\link{exp_weights}};
-  \code{\link{spjotvoll_weights}}
+  \code{\link{iGWAS}}; \code{\link{spjotvoll_weights}}
 }
 

@@ -4,7 +4,9 @@
 \alias{iGWAS}
 \title{informed Genome-Wide Association Study}
 \usage{
-iGWAS(P_current, N_current, P_prior, N_prior, q = 0.05, phi = 1)
+iGWAS(P_current, N_current, P_prior, N_prior, q = 0.05,
+  weighting_method = "bayes", p_adjust_method = "bonferroni", phi = 1,
+  beta = 2, UB_exp = Inf)
 }
 \arguments{
 \item{P_current}{P-values in the current study, a numeric vector of length J, with entries between 0 and 1}
@@ -17,14 +19,36 @@ iGWAS(P_current, N_current, P_prior, N_prior, q = 0.05, phi = 1)
 
 \item{q}{(optional) uncorrected level at which tests should be performed. Default \code{q = 0.05}}
 
-\item{phi}{(optional) dispersion factor used to multiply all standard errors. Default \code{phi = 1}}
+\item{weighting_method}{(optional) weighting method used. Available methods: \code{c("unweighted", "bayes", "spjotvoll", "exponential")}. The default is \code{"bayes"}.}
+
+\item{p_adjust_method}{(optional) adjustment method for multiple testing used. The available methods are those from the \code{p.adjust} function in the \code{stats} package. They include \code{c("holm", "hochberg", "hommel", "bonferroni", "BH", "BY",  "fdr", "none")}. The default is \code{"bonferroni"}.}
+
+\item{phi}{(optional) dispersion factor used to multiply all standard errors. Default \code{phi = 1}. Used only for Bayes weights.}
+
+\item{beta}{(optional) weights are proportional to \code{exp(mu*beta)}, default \code{beta=2}. Used only for Exponential weights.}
+
+\item{UB}{(optional) upper bound on the weights (default \code{UB = Inf}). Used only for Exponential weights.}
 }
 \value{
-A vector of 0-1s indicating the significant tests (1-s)
+A list containing:
+
+\code{sig_ind}: A vector of 0-1s indicating the significant tests (1-s)
+
+\code{w}: The computed p-value weights
 }
 \description{
+Perform an informed Genome-Wide Association Study (iGWAS). This is based on a current study and a prior study. The goal is to discover significant SNPs in the current study using hypothesis testing. The prior study is used to improve power. P-values and sample sizes are used for both the current and the prior studies.
+}
+\details{
+The p-value weighting method (e.g. Unweighted, Bayes) and the multiple testing adjustment (e.g. Bonferroni, Benjamini-Hochberg) can be specified independently.
+
 For more details, see the paper "Optimal Multiple Testing Under a
  Gaussian Prior on the Effect Sizes", by Dobriban, Fortney, Kim and Owen,
   \url{http://arxiv.org/abs/1504.02935}
+}
+\seealso{
+Other p.value.weighting: \code{\link{bayes_weights}};
+  \code{\link{exp_weights}};
+  \code{\link{spjotvoll_weights}}
 }
 

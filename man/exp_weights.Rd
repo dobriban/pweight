@@ -4,14 +4,14 @@
 \alias{exp_weights}
 \title{Exponential p-value weights}
 \usage{
-exp_weights(mu, beta, UB = Inf)
+exp_weights(mu, beta = 2, UB = Inf)
 }
 \arguments{
 \item{mu}{the estimated means of the test statistics}
 
-\item{beta}{weights are proportional to \code{exp(mu*beta)}}
+\item{beta}{(optional) weights are proportional to \code{exp(mu*beta)}, default \code{beta=2}}
 
-\item{UB}{upper bound on the weights (default \code{UB = Inf})}
+\item{UB}{(optional) upper bound on the weights (default \code{UB = Inf})}
 }
 \value{
 The exponential weights.
@@ -45,6 +45,6 @@ w <- exp_weights(mu, beta, UB)
   weights
 
 Other p.value.weighting: \code{\link{bayes_weights}};
-  \code{\link{spjotvoll_weights}}
+  \code{\link{iGWAS}}; \code{\link{spjotvoll_weights}}
 }
 

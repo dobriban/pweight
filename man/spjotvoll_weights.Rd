@@ -38,6 +38,6 @@ w <- spjotvoll_weights(mu, q)
 }
 \seealso{
 Other p.value.weighting: \code{\link{bayes_weights}};
-  \code{\link{exp_weights}}
+  \code{\link{exp_weights}}; \code{\link{iGWAS}}
 }
 

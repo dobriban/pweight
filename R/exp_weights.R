@@ -17,8 +17,8 @@
 #'   \url{http://arxiv.org/abs/1504.02935}
 
 #' @param  mu  the estimated means of the test statistics
-#' @param  beta weights are proportional to \code{exp(mu*beta)}
-#' @param  UB upper bound on the weights (default \code{UB = Inf})
+#' @param  beta (optional) weights are proportional to \code{exp(mu*beta)}, default \code{beta=2}
+#' @param  UB (optional) upper bound on the weights (default \code{UB = Inf})
 #'
 #' @return  The exponential weights.
 #'
@@ -34,7 +34,7 @@
 #'
 #' @export
 #'
-exp_weights <- function(mu,  beta,  UB = Inf) {
+exp_weights <- function(mu,  beta=2,  UB = Inf) {
 
   #Error checking: stop if the variables are not in range
   if (UB <= 1) {
