@@ -12,7 +12,7 @@ vignette: >
 
 The Pweight R package contains open source implementations of p-value weighting methods for multiple testing, including Spjotvoll, exponential and Bayes weights.
 
-In this vignette, we will walk through an example data analysis with p-value weights. 
+In this vignette, we will walk through an example data analysis with p-value weights. We will also conduct an example of iGWAS on simulated data.
 
 ## P-value weighting methods
 
