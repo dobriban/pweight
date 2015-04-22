@@ -1,0 +1,109 @@
+---
+title: "iGWAS example - Coronary Artery Disease"
+author: "Kristen Fortney"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+bibliography: weighted.bib
+vignette: >
+  %\VignetteIndexEntry{iGWAS example - Coronary Artery Disease}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+We developed informed GWAS (iGWAS) to apply p-value weighting to pairs of genome-wide association studies. For two related phenotypes, iGWAS uses prior knowledge from one GWAS to weight the P values from another. This strategy may lead to the discovery of new loci. The Pweight package function iGWAS performs this analysis. iGWAS can use any weighting scheme provided in Pweight, including Bayes, Spjotvoll, and exponential weights.
+
+In this vignette, we will demonstrate how to run a simple iGWAS analysis on real data, using two independent, publicly available GWAS meta-analyses of coronary artery disease available from the CARDIoGRAMplusC4D Consortium (http://www.cardiogramplusc4d.org/downloads/).
+
+These two studies were originally described in:
+
+Schunkert H, König IR, Kathiresan S, Reilly MP, Assimes TL, Holm H et al. Large-scale association analysis identifies 13 new susceptibility loci for coronary artery disease. Nat Genet. 2011 43: 333-338
+["CARDIoGRAM_GWAS_RESULTS.txt"]
+
+Coronary Artery Disease (C4D) Genetics Consortium (Writing Committee: Peden JF,  Hopewell JC, Saleheen D, Chambers JC, Hager J, Soranzo N, Collins R, Danesh J, Elliott P, Farrall M, Stirrups K, Zhang W, Hamsten A, Parish S, Lathrop M, Watkins H (Chair), Clarke R, Deloukas P, Kooner J). A genome-wide association study in Europeans and South Asians identifies five new loci for coronary artery disease. Nat Genet. 2011 43: 339-344
+["C4D_CAD_DISCOVERY_METAANALYSIS_UPDATE.TXT"]
+
+## Preparing data
+
+As input, the function \code{iGWAS} requires the p-values and sample sizes of the two GWAS studies. 
+
+First, we load in the example data which consists of p-values for all 514,178 SNPs tested in both the C4D and CARDIoGRAM association analyses, as well as the number of cases and controls in each study. The input P value vectors should be of the same size, and in the same order.  
+
+```{r}
+load("iGWAS.cad.example.RData")
+```
+
+We calculate the effective sample size of each study as:
+
+```{r}
+c4d_ss <- 4/(1/c4d_ncases + 1/c4d_ncontrols)
+cardiogram_ss <- 4/(1/cardiogram_ncases + 1/cardiogram_ncontrols)
+```
+
+We are now ready to run iGWAS.
+
+## iGWAS analysis: the basics
+
+The simplest way to run iGWAS is using default settings. The default setting uses Bayes weights. Each of the weighting functions, and the iGWAS routine, make assumptions about the input data; these are explored more fully in the "Pweight Basics" vignette.
+
+As an example, we use the larger CARDIoGRAM study (# cases = 22233, # controls = 64762) to weight the C4D data (# cases = 15420, # controls = 15062):
+
+```{r}
+source("../R/iGWAS.R")
+source("../R/bayes_weights.R")
+res_default <- iGWAS(P_current=c4d$P, N_current=c4d_ss, P_prior=cardiogram$P, N_prior=cardiogram_ss)
+w <- res_default$w
+P_weighted <- c4d$P/w
+cat(c("Number of genome-wide significant SNPs (P < 5e-8) with weighting: ", sum(P_weighted < 5e-8) ))
+```
+
+40 SNPs are genome-wide significant after weighting. We can check whether weighting increases the number of genome-wide hits, versus using the original data with no prior knowledge:
+
+```{r}
+cat(c("Number of genome-wide significant SNPs (P < 5e-8) with no weighting: ", sum(c4d$P < 5e-8) ))
+```
+
+In this example, p-value weighting increases the number of genome-wide significant SNPs from 29 to 40. Further analyses would be needed to determine whether the 11 additional SNPs are in linkage disequilibrium with the 29, or whether they represent new and independent loci.
+
+We can inspect the correspondence between weights and p-values from the prior-knowledge CARDIoGRAM study:
+
+```{r}
+plot(-log10(cardiogram$P), w, main="How Bayes weights depend on p-values", ylab=expression(italic(w)), xlab=expression(-log[10](italic(p))))
+cat(c("Maximum weight reached at:", cardiogram$P[which.max(w)] ))
+```
+
+Weight increases with decreasing P value until it reaches a maximum, then decreases. Lower weight is assigned to SNPs with P values below 4.25e-09, as these SNPs are expected to have a very low P values in the current C4D study, and not require weighting to attain significance.
+
+## Downstream analysis and visualization of iGWAS results
+
+Other packages can be used for downstream analysis of significant SNPs. We can use qqman to derive a global visualization of significant P values, before and after weighting:
+
+
+```{r}
+library(qqman)
+c4d$CHR <- as.numeric(c4d$CHR)
+c4d$BP <- as.numeric(c4d$BP)
+c4d_wt <- c4d
+c4d_wt$P <- P_weighted
+
+manhattan(c4d_wt, ylim=c(0,29), col = c("chartreuse", "chartreuse"), suggestiveline=F)
+par(new=T)
+manhattan(c4d, ylim=c(0,29), col = c("black", "black"), suggestiveline=F)
+```
+
+Here, unweighted P values are shown in black and weighted P values in green. The line corresponds to the threshold for genome-wide significance.
+
+## The impact of other parameters
+
+For phi
+
+```{r}
+#EDITS NEEDED: Would like to use genome-side sig rather than bonferroni, and phi=0
+phi=seq(0.5,4,by=0.5)
+numSNP <- sapply(phi,function(x){sum(iGWAS(c4d$P, c4d_ss, cardiogram$P, cardiogram_ss, phi=x)$sig_ind)})
+plot(phi, numSNP, type="o", main="Choice of phi impacts the number of significant SNPs", ylab="# SNPs", xlab=expression(phi))
+cat(c("Choice of phi that maximizes the number of genome-wide significant SNPs:", phi[which.max(numSNP)] ))
+```
+
+Other types of weight
+
+## References
