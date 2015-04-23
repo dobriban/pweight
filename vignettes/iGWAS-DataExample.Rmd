@@ -51,9 +51,6 @@ As an example, we use the larger CARDIoGRAM study (# cases = 22233, # controls =
 source("../R/iGWAS.R")
 source("../R/bayes_weights.R")
 res_default <- iGWAS(P_current=c4d$P, N_current=c4d_ss, P_prior=cardiogram$P, N_prior=cardiogram_ss)
-w <- res_default$w
-P_weighted <- c4d$P/w
-cat(c("Number of genome-wide significant SNPs (P < 5e-8) with weighting: ", sum(P_weighted < 5e-8) ))
 ```
 
 40 SNPs are genome-wide significant after weighting. We can check whether weighting increases the number of genome-wide hits, versus using the original data with no prior knowledge:
@@ -67,6 +64,7 @@ In this example, p-value weighting increases the number of genome-wide significa
 We can inspect the correspondence between weights and p-values from the prior-knowledge CARDIoGRAM study:
 
 ```{r}
+w = res_default$w
 plot(-log10(cardiogram$P), w, main="How Bayes weights depend on p-values", ylab=expression(italic(w)), xlab=expression(-log[10](italic(p))))
 cat(c("Maximum weight reached at:", cardiogram$P[which.max(w)] ))
 ```
@@ -75,30 +73,36 @@ Weight increases with decreasing P value until it reaches a maximum, then decrea
 
 ## Downstream analysis and visualization of iGWAS results
 
-Other packages can be used for downstream analysis of significant SNPs. We can use qqman to derive a global visualization of significant P values, before and after weighting:
+Other packages can be used for downstream analysis of significant SNPs. For the common task of visualizing of significant P values, before and after weighting, there is a built-in option `figure="T"` in the iGWAS function. This also requires us to pass in the GWAS data frame with the parameter `GWAS_data_frame=c4d`. The iGWAS function calls the qqman package to generate the Manhattan plot. In particular, this step requires qqman.
 
+
+```{r}
+res_default <- iGWAS(P_current=c4d$P, N_current=c4d_ss, P_prior=cardiogram$P, N_prior=cardiogram_ss,figure="T", GWAS_data_frame=c4d)
+```
+
+Here, unweighted P values are shown in black and weighted P values in green. The line corresponds to the threshold for genome-wide significance.
+
+Alternatively, one can use `qqman` directly to visualize the same plot.
 
 ```{r}
 library(qqman)
 c4d$CHR <- as.numeric(c4d$CHR)
 c4d$BP <- as.numeric(c4d$BP)
 c4d_wt <- c4d
-c4d_wt$P <- P_weighted
+c4d_wt$P <- res_default$P_w
 
 manhattan(c4d_wt, ylim=c(0,29), col = c("chartreuse", "chartreuse"), suggestiveline=F)
 par(new=T)
 manhattan(c4d, ylim=c(0,29), col = c("black", "black"), suggestiveline=F)
 ```
 
-Here, unweighted P values are shown in black and weighted P values in green. The line corresponds to the threshold for genome-wide significance.
-
 ## The impact of other parameters
 
 For phi
 
 ```{r}
-#EDITS NEEDED: Would like to use genome-side sig rather than bonferroni, and phi=0
-phi=seq(0.5,4,by=0.5)
+source("../R/spjotvoll_weights.R")
+phi=seq(0,4,by=0.5)
 numSNP <- sapply(phi,function(x){sum(iGWAS(c4d$P, c4d_ss, cardiogram$P, cardiogram_ss, phi=x)$sig_ind)})
 plot(phi, numSNP, type="o", main="Choice of phi impacts the number of significant SNPs", ylab="# SNPs", xlab=expression(phi))
 cat(c("Choice of phi that maximizes the number of genome-wide significant SNPs:", phi[which.max(numSNP)] ))
