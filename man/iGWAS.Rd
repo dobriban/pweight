@@ -5,8 +5,8 @@
 \title{informed Genome-Wide Association Study}
 \usage{
 iGWAS(P_current, N_current, P_prior, N_prior, q = 0.05,
-  weighting_method = "bayes", p_adjust_method = "bonferroni", phi = 1,
-  beta = 2, UB_exp = Inf)
+  weighting_method = "bayes", p_adjust_method = "bonferroni", sides = 2,
+  phi = 1, beta = 2, UB_exp = Inf)
 }
 \arguments{
 \item{P_current}{P-values in the current study, a numeric vector of length J, with entries between 0 and 1}
@@ -22,6 +22,8 @@ iGWAS(P_current, N_current, P_prior, N_prior, q = 0.05,
 \item{weighting_method}{(optional) weighting method used. Available methods: \code{c("unweighted", "bayes", "spjotvoll", "exponential")}. The default is \code{"bayes"}.}
 
 \item{p_adjust_method}{(optional) adjustment method for multiple testing used. The available methods are those from the \code{p.adjust} function in the \code{stats} package. They include \code{c("holm", "hochberg", "hommel", "bonferroni", "BH", "BY",  "fdr", "none")}. The default is \code{"bonferroni"}.}
+
+\item{sides}{(optional) The prior p-values must be one or two-sided: sides = 1 or 2. Default \code{sides = 2}}
 
 \item{phi}{(optional) dispersion factor used to multiply all standard errors. Default \code{phi = 1}. Used only for Bayes weights.}
 
@@ -40,7 +42,7 @@ A list containing:
 Perform an informed Genome-Wide Association Study (iGWAS). This is based on a current study and a prior study. The goal is to discover significant SNPs in the current study using hypothesis testing. The prior study is used to improve power. P-values and sample sizes are used for both the current and the prior studies.
 }
 \details{
-The p-value weighting method (e.g. Unweighted, Bayes) and the multiple testing adjustment (e.g. Bonferroni, Benjamini-Hochberg) can be specified independently.
+This method computes the p-value weights based on the prior p-values, and uses them in multiple testing (p-value weighting) for the current p-values.  The p-value weighting method (e.g. Unweighted, Bayes) and the multiple testing adjustment (e.g. Bonferroni, Benjamini-Hochberg) can be specified independently.
 
 For more details, see the paper "Optimal Multiple Testing Under a
  Gaussian Prior on the Effect Sizes", by Dobriban, Fortney, Kim and Owen,

@@ -4,10 +4,10 @@ Title: P-value Weighting
 Version: 0.0.0.9000
 Date: 2015-04-18
 Authors@R: c(
-    person("Edgar", "Dobriban", email = "dobriban@stanford.edu", role = "cre"),
+    person("Edgar", "Dobriban", email = "dobriban@stanford.edu", role = c("aut","cre")),
     person("Kristen", "Fortney", email = "kfortney@stanford.edu", role = "aut"))
-URL: https://github.com/edgardobriban/pweight
-BugReports: https://github.com/edgardobriban/pweight/issues
+URL: https://github.com/dobriban/pweight
+BugReports: https://github.com/dobriban/pweight/issues
 Description: This R package contains open source implementations
   of several p-value weighting methods, including Spjotvoll, exponential
   and Bayes weights. These are methods for improving power in multiple testing
