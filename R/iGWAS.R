@@ -150,12 +150,13 @@ iGWAS <-
       library(qqman)
       GWAS_data_frame$CHR <- as.numeric(GWAS_data_frame$CHR)
       GWAS_data_frame$BP <- as.numeric(GWAS_data_frame$BP)
+      GWAS_data_frame$P <- P_current
       GWAS_data_frame_wt <- GWAS_data_frame
       GWAS_data_frame_wt$P <- P_weighted
 
-      manhattan(GWAS_data_frame_wt, ylim=c(0,29), col = c("chartreuse", "chartreuse"), suggestiveline=F)
+      suppressWarnings(manhattan(GWAS_data_frame_wt, ylim=c(0,29), col = c("chartreuse", "chartreuse"), suggestiveline=F))
       par(new=T)
-      manhattan(GWAS_data_frame, ylim=c(0,29), col = c("black", "black"), suggestiveline=F)
+      suppressWarnings(manhattan(GWAS_data_frame, ylim=c(0,29), col = c("black", "black"), suggestiveline=F))
     }
     results <- list(
       "w" = w, "P_w" = P_weighted, "sig_ind" = sig_ind, "num_sig" = sum(sig_ind)
