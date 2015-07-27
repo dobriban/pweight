@@ -157,7 +157,7 @@ iGWAS <-
 
       suppressWarnings(qqman::manhattan(GWAS_data_frame_wt, ylim=c(0,29), col = c("chartreuse", "chartreuse"), suggestiveline=F))
       par(new=T)
-      suppressWarnings(manhattan(GWAS_data_frame, ylim=c(0,29), col = c("black", "black"), suggestiveline=F))
+      suppressWarnings(qqman::manhattan(GWAS_data_frame, ylim=c(0,29), col = c("black", "black"), suggestiveline=F))
     }
     results <- list(
       "w" = w, "P_w" = P_weighted, "sig_ind" = sig_ind, "num_sig" = sum(sig_ind)
