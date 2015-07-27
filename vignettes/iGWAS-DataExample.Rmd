@@ -16,7 +16,7 @@ In this vignette, we will demonstrate how to run a simple iGWAS analysis on real
 
 These two studies were originally described in:
 
-Schunkert H, König IR, Kathiresan S, Reilly MP, Assimes TL, Holm H et al. Large-scale association analysis identifies 13 new susceptibility loci for coronary artery disease. Nat Genet. 2011 43: 333-338
+Schunkert H, Konig IR, Kathiresan S, Reilly MP, Assimes TL, Holm H et al. Large-scale association analysis identifies 13 new susceptibility loci for coronary artery disease. Nat Genet. 2011 43: 333-338
 ["CARDIoGRAM_GWAS_RESULTS.txt"]
 
 Coronary Artery Disease (C4D) Genetics Consortium (Writing Committee: Peden JF,  Hopewell JC, Saleheen D, Chambers JC, Hager J, Soranzo N, Collins R, Danesh J, Elliott P, Farrall M, Stirrups K, Zhang W, Hamsten A, Parish S, Lathrop M, Watkins H (Chair), Clarke R, Deloukas P, Kooner J). A genome-wide association study in Europeans and South Asians identifies five new loci for coronary artery disease. Nat Genet. 2011 43: 339-344
@@ -31,6 +31,7 @@ First, we load in the example data which consists of p-values for all 514,178 SN
 The example data file is ~5MB in size and can be downloaded directly from github into R:
 
 ```{r}
+setInternet2(use = TRUE)
 download.file("https://github.com/dobriban/pweight/raw/master/vignettes/iGWAS.cad.example.RData", destfile = "exampledata", method = "auto")
 load("exampledata")
 ```

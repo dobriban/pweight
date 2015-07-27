@@ -27,9 +27,9 @@
 #' Used only for Exponential weights.
 #' @param  UB_exp (optional) upper bound on the weights (default \code{UB = Inf}).
 #'  Used only for Exponential weights.
-#' @param  figure (optional) \code{figure = "T"} creates a manhattan plot of the weighted and unweighted p-values.
-#' Possible values \code{c("T","F")}, default \code{"F"}
-#' @param  GWAS_data_frame (optional) when \code{figure = "T"}, this is the parameter used to create a
+#' @param  figure (optional) \code{figure = "TRUE"} creates a manhattan plot of the weighted and unweighted p-values.
+#' Possible values \code{c("TRUE","FALSE")}, default \code{"FALSE"}
+#' @param  GWAS_data_frame (optional) when \code{figure = "TRUE"}, this is the parameter used to create a
 #' Manattan plot. it must be a data frame with columns containing \code{c("CHR","BP")}.
 #' These parameters are passed to the qqman package for plotting manhattan plots. Default is NA.
 #'
@@ -50,7 +50,7 @@
 iGWAS <-
   function(P_current, N_current, P_prior, N_prior, q = 0.05, weighting_method = "bayes",
            p_adjust_method = "genome-wide", sides = 2, phi = 1, beta = 2, UB_exp = Inf,
-           figure = "F", GWAS_data_frame=NA) {
+           figure = "FALSE", GWAS_data_frame=NA) {
     # Error checking: stop if the variables are not in range
     {
       if (any(P_current > 1) |
@@ -146,7 +146,7 @@ iGWAS <-
     }
 
     #plot
-    if (figure=="T"){
+    if (figure=="TRUE"){
       #library(qqman)
       requireNamespace(qqman, quietly = TRUE)
       GWAS_data_frame$CHR <- as.numeric(GWAS_data_frame$CHR)

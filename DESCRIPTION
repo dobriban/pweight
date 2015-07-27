@@ -14,5 +14,6 @@ Description: This R package contains open source implementations
   via the use of prior information.
 License: GPL-3
 LazyData: TRUE
-Suggests: knitr, qqman
+Suggests: knitr
+Imports: qqman
 VignetteBuilder: knitr

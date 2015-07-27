@@ -21,6 +21,13 @@ Several of these methods were proposed by the authors in the following papers:
 
 \code{\link{spjotvoll_weights}} computes the Spjotvoll p-value weights
 
-\code{\link{colSums}} computes the exponential weights
+\code{\link{exp_weights}} computes the exponential weights
+}
+\examples{
+J <- 100
+mu <- rnorm(J)
+sigma <- 1 * rep(1, J)
+q <- 0.05 / J
+res <- bayes_weights(mu, sigma, q)
 }
 
