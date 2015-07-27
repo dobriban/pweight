@@ -28,7 +28,7 @@ c_1 <- function(eta, gamma, lambda, logscale = 0) {
   # numerical slack
   epsi <- 1e-7
   if (square < -epsi) {
-    fprintf("square = ",square, " is negative")
+    cat("square = ",square, " is negative\n")
     #error('c_1:neg_square', 'Quadratic expression q is not positive')
   }
   c1  <-  - (eta + sqrt(abs(square))) / (gamma^2 - 1)

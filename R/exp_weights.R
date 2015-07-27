@@ -29,7 +29,7 @@
 #' UB <- 20
 #' w <- exp_weights(mu, beta, UB)
 #' @family p-value weighting
-#' @seealso \code{\link{bayes_weights}} for Bayes, \code{\link{spjotvoll}} for Spjotvoll weights, and \code{\link{exp_weights}} for exponential
+#' @seealso \code{\link{bayes_weights}} for Bayes, \code{\link{spjotvoll_weights}} for Spjotvoll weights, and \code{\link{exp_weights}} for exponential
 #'   weights
 #'
 #' @export

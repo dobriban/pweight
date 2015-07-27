@@ -1,7 +1,7 @@
 # Unit tests for Spjotvoll weights
 
-source("./R/bayes_weights.R")
-source("./R/spjotvoll_weights.R")
+#source("./R/bayes_weights.R")
+#source("./R/spjotvoll_weights.R")
 
 # Plots  ----------------
 # generate means

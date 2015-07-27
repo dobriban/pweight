@@ -38,6 +38,13 @@
 #' res <- bayes_weights(mu, sigma, q)
 #'
 #' @family p-value weighting
+#' @importFrom graphics par
+#' @importFrom stats dnorm
+#' @importFrom stats p.adjust
+#' @importFrom stats pnorm
+#' @importFrom stats qnorm
+#' @importFrom stats uniroot
+#' @importFrom utils methods
 #' @export
 #'
 
@@ -195,20 +202,20 @@ bayes_weights <- function(mu, sigma, q) {
         #(2) : Jq is in (c,b): in this case can certify the original problem
       } else {
         # find the zero of the following function f
-        f <- function(lambda)
+        f0 <- function(lambda)
           H(lambda) - J * q
         # will use standard matlab zero-finding need starting interval
-        # ensure starting points have opposite sign: f is decreasing
+        # ensure starting points have opposite sign: f0 is decreasing
         epsi <- 1e-7
         l_1 <- l_sort[l] + epsi
         l_2 <- l_sort[l + 1]
-        while (f(l_1) < 0) {
+        while (f0(l_1) < 0) {
           epsi <- epsi / 10
           l_1 <- l_sort[l] + epsi
         }
         x0 <- c(l_1, l_2) #  initial interval
 
-        uniroot_struct <- uniroot(f,x0)
+        uniroot_struct <- uniroot(f0,x0)
         lambda <- uniroot_struct$root
         q_star <- J * q
         true_q <- q

@@ -1,6 +1,6 @@
 # Unit tests for Exp weights
 
-source("./R/exp_weights.R")
+#source("./R/exp_weights.R")
 
 # Plots  ----------------
 # generate means

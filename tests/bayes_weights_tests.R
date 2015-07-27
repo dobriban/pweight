@@ -1,6 +1,6 @@
 # Unit tests for bayes weights
 
-source("./R/bayes_weights.R")
+#source("./R/bayes_weights.R")
 
 # Plots  ----------------
 # generate means

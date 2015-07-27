@@ -1,8 +1,8 @@
 Package: pweight
 Type: Package
-Title: P-value Weighting
-Version: 0.0.0.9000
-Date: 2015-04-18
+Title: P-Value Weighting
+Version: 0.0.1
+Date: 2015-07-26
 Authors@R: c(
     person("Edgar", "Dobriban", email = "dobriban@stanford.edu", role = c("aut","cre")),
     person("Kristen", "Fortney", email = "kfortney@stanford.edu", role = "aut"))
@@ -11,8 +11,8 @@ BugReports: https://github.com/dobriban/pweight/issues
 Description: This R package contains open source implementations
   of several p-value weighting methods, including Spjotvoll, exponential
   and Bayes weights. These are methods for improving power in multiple testing
-  via the use of prior informaton.
+  via the use of prior information.
 License: GPL-3
 LazyData: TRUE
-Suggests: knitr
+Suggests: knitr, qqman
 VignetteBuilder: knitr

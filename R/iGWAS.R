@@ -147,14 +147,15 @@ iGWAS <-
 
     #plot
     if (figure=="T"){
-      library(qqman)
+      #library(qqman)
+      requireNamespace(qqman, quietly = TRUE)
       GWAS_data_frame$CHR <- as.numeric(GWAS_data_frame$CHR)
       GWAS_data_frame$BP <- as.numeric(GWAS_data_frame$BP)
       GWAS_data_frame$P <- P_current
       GWAS_data_frame_wt <- GWAS_data_frame
       GWAS_data_frame_wt$P <- P_weighted
 
-      suppressWarnings(manhattan(GWAS_data_frame_wt, ylim=c(0,29), col = c("chartreuse", "chartreuse"), suggestiveline=F))
+      suppressWarnings(qqman::manhattan(GWAS_data_frame_wt, ylim=c(0,29), col = c("chartreuse", "chartreuse"), suggestiveline=F))
       par(new=T)
       suppressWarnings(manhattan(GWAS_data_frame, ylim=c(0,29), col = c("black", "black"), suggestiveline=F))
     }
