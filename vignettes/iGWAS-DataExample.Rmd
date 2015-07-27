@@ -31,8 +31,9 @@ First, we load in the example data which consists of p-values for all 514,178 SN
 The example data file is ~5MB in size and can be downloaded directly from github into R:
 
 ```{r}
-setInternet2(use = TRUE)
-download.file("https://github.com/dobriban/pweight/raw/master/vignettes/iGWAS.cad.example.RData", destfile = "exampledata", method = "auto")
+#uncomment on Windows
+#setInternet2(use = TRUE)
+download.file("http://github.com/dobriban/pweight/raw/master/vignettes/iGWAS.cad.example.RData", destfile = "exampledata", method = "libcurl")
 load("exampledata")
 ```
 

@@ -74,7 +74,8 @@ iGWAS <-
         stop("The prior p-values must be one or two-sided: sides = 1 or 2")
       }
     }
-
+    #this is needed to avoid the NOTE: iGWAS: no visible binding for global variable ???qqman???
+    qqman = NULL
     # Define auxiliary variables to compute weights
     {
       J <- length(P_current)
