@@ -14,7 +14,7 @@ To use this information for improving power in multiple hypothesis testing, we c
 ```{r}
 w <- bayes_weights(t1,sigma,q)$w
 P_weighted <- P_current/w
-```{r}
+```
 
 Finally, we perform weighted Bonferroni multiple testing, controlling the Family-Wise Error Rate, in the usual way: 
 ```{r}
@@ -37,9 +37,9 @@ It is also possible to install from CRAN.
 
 The core of the package consists of the following p-value weighting methods, whose details are described in the documentation:
 
-Spjotvoll weights: `spjotvoll_weights()`
-Exponential weights: `exponential_weights()`
-Bayes weights: `bayes_weights()`
+* Spjotvoll weights: `spjotvoll_weights()` 
+* Exponential weights: `exponential_weights()` 
+* Bayes weights: `bayes_weights()`
 
 The iGWAS method, `iGWAS()`, is provided for applications of p-value weighting in Genome-Wide Association Studies.
 
