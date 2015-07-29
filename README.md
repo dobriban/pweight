@@ -31,7 +31,12 @@ To install from GitHub, make sure that Hadley Wickham's devtools (https://github
 devtools::install_github("dobriban/pweight")
 ```
 
-It is also possible to install from CRAN.
+The package is also available from CRAN at:  https://cran.r-project.org/web/packages/pweight/.
+To install from CRAN within R, type
+
+```{r}
+install.packages("pweight")
+```
 
 ## Main components
 
