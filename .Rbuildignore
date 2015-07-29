@@ -4,4 +4,5 @@
 ^cran-comments\.md$
 ^NEWS\.md$
 ^pweight\.Rproj$
-^iGWAS.cad\.example$
+^iGWAS.cad.example.\Rdata$
+vignettes/iGWAS.cad.example.Rdata

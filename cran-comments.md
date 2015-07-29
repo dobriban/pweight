@@ -1,5 +1,5 @@
 ## Test environments
-* local Windows 7 install, R 3.2.0
+* local Windows 7 install, R 3.2.1
 * local Mac OS 9.5 install, R 3.2.1
 * win-builder (release and development)
 
