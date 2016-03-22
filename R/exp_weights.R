@@ -2,7 +2,7 @@
 #'
 #' Computes the exponential p-value weights for multiple testing.
 #' Given estimated means \code{mu} of test statistics \code{T},
-#' the p-value weights are proportional to \code{exp(beta*mu)},
+#' the p-value weights are proportional to \code{exp(-beta*mu)},
 #' for a tilt parameter \code{beta}. In addition, the large weights are truncated
 #' at a maximum value \code{UB} (upper bound), and the remaining weight is re-distributed
 #' among the rest of the statistics.
@@ -41,13 +41,12 @@ exp_weights <- function(mu,  beta=2,  UB = Inf) {
     stop("The upper bound UB must be greater than 1")
   }
 
-
   J <-  length(mu)
 
   #The exponential weights themselves are easy to compute
   mu_s <-  sort(mu)
   sort_index <-  order(mu)
-  u <-  exp(beta * mu_s)
+  u <-  exp(- beta * mu_s)
   c <-  mean(u)
   w <-  u / c
 
@@ -55,6 +54,12 @@ exp_weights <- function(mu,  beta=2,  UB = Inf) {
 
   if (UB == Inf) {
     #Case 1: no upper bound
+    #un-sort the weights
+    v <-  rep(0,J)
+    for (i in 1:J) {
+      v[i] <-  w[sort_index == i]
+    }
+    w <-  v
     return(w)
   } else {
     #Case 2: finite upper bound
@@ -73,20 +78,19 @@ exp_weights <- function(mu,  beta=2,  UB = Inf) {
     #Re-distribute the surplus among the next largest weights
     #surplus keeps track of how much extra weight we have left
     while (surplus > 0) {
-      increment <-  min(1 / q - w[J - k], surplus)
+      increment <-  min(1 / q - w[k+1], surplus)
       #increase the next remaining weight to the maximal possible value
       #without going above UB=1/q
-      w[J - k] <-  w[J - k]  +  increment
+      w[k+1] <-  w[k+1]  +  increment
       surplus <-  surplus  -  increment
       k <-  k + 1
     }
-
-    #un-sort the weights
-    v <-  rep(0,J)
-    for (i in 1:J) {
-      v[i] <-  w[sort_index == i]
-    }
-    w <-  v
-    return(w)
   }
+  #un-sort the weights
+  v <-  rep(0,J)
+  for (i in 1:J) {
+    v[i] <-  w[sort_index == i]
+  }
+  w <-  v
+  return(w)
 }
