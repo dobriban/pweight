@@ -162,13 +162,13 @@ First we perform unweighted testing.
 
 ```{r}
 source("../R/iGWAS.R")
-res_unw <- iGWAS(P_current, N_current, P_prior, N_prior, weighting_method="unweighted")
+res_unw <- iGWAS(P_current, N_current, P_prior, N_prior, weighting_method="unweighted", p_adjust_method = "bonferroni")
 ```
 
 As expected, we get the same results as before. Now, we perform weighted testing. To indicate that the prior p-values are one-sided, we include the 'sides=1' argument. 
 
 ```{r}
-res_w <- iGWAS(P_current, N_current, P_prior, N_prior, sides=1)
+res_w <- iGWAS(P_current, N_current, P_prior, N_prior, sides=1,  p_adjust_method = "bonferroni")
 ```
 
 Again, p-value weighting leads to improved power, and a larger number of significant hits. 
