@@ -157,3 +157,6 @@ $RECYCLE.BIN/
 .Rproj.user
 .Rhistory
 .Rhistory
+.Rhistory
+*.Rhistory
+.RData
