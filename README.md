@@ -4,7 +4,7 @@
 This R package contains p-value weighting methods for multiple hypothesis testing. These statistical methods are used for improving power in multiple testing via the use of prior information. The iGWAS method is provided for applications of p-value weighting in Genome-Wide Association Studies.
 
 Some of these methods were were developed by the authors in the following paper:
-*Optimal Multiple Testing Under a Gaussian Prior on the Effect Sizes* by Dobriban, Fortney, Kim, Owen:  http://arxiv.org/abs/1504.02935
+*Optimal Multiple Testing Under a Gaussian Prior on the Effect Sizes* by Dobriban, Fortney, Kim, Owen:  http://arxiv.org/abs/1504.02935, published in Biometrika (2015)
 
 ## An Example
 Suppose we want to find the significant effects in a large pool of candidates, by performing  multiple testing with the p-values `P_current`. We have some prior information about the size of each effect size in the form of prior test statistics `t1` with estimated variances `sigma`. The prior effects `t1` with standard errors `sigma` are our prior guesses for the current effects.
@@ -31,12 +31,7 @@ To install from GitHub, make sure that Hadley Wickham's devtools (https://github
 devtools::install_github("dobriban/pweight")
 ```
 
-The package is also available from CRAN at:  https://cran.r-project.org/web/packages/pweight/.
-To install from CRAN within R, type
-
-```{r}
-install.packages("pweight")
-```
+The package was also available from CRAN, but has been archived.
 
 ## Main components
 
