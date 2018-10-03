@@ -1,6 +1,6 @@
-#P-value Weighting R Package
+# P-value Weighting R Package
 
-##Introduction
+## Introduction
 This R package contains p-value weighting methods for multiple hypothesis testing. These statistical methods are used for improving power in multiple testing via the use of prior information. The iGWAS method is provided for applications of p-value weighting in Genome-Wide Association Studies.
 
 Some of these methods were were developed by the authors in the following paper:
